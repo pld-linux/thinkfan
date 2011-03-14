@@ -1,0 +1,86 @@
+#!/bin/sh
+#
+# thinkfan		Start/Stop thinkfan daemon
+#
+# chkconfig:	2345 40 60
+# description:	thinkpad fan control programcron is a standard UNIX program that runs user-specified \
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/thinkfan ]; then
+		msg_already_running "thinkfan"
+		return
+	fi
+
+	msg_starting "thinkfan"
+	daemon /usr/sbin/thinkfan
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/thinkfan
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/thinkfan ]; then
+		msg_not_running "thinkfan"
+		return
+	fi
+
+	msg_stopping "thinkfan"
+	killproc thinkfan
+	rm -f /var/lock/subsys/thinkfan
+}
+
+reload() {
+	if [ ! -f /var/lock/subsys/thinkfan ]; then
+		msg_not_running "thinkfan"
+		RETVAL=7
+		return
+	fi
+
+	msg_reloading "thinkfan"
+	killproc thinkfan -HUP
+	RETVAL=$?
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/thinkfan ]; then
+		msg_not_running "thinkfan"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  reload|force-reload|flush-logs)
+  	reload
+	;;
+  status)
+	status thinkfan
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|flush-logs|status}"
+	exit 3
+esac
+
+exit $RETVAL
