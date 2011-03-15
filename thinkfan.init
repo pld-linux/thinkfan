@@ -3,7 +3,7 @@
 # thinkfan		Start/Stop thinkfan daemon
 #
 # chkconfig:	2345 40 60
-# description:	thinkpad fan control programcron is a standard UNIX program that runs user-specified \
+# description:	thinkpad fan control program
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -71,7 +71,7 @@ case "$1" in
   try-restart)
 	condrestart 0
 	;;
-  reload|force-reload|flush-logs)
+  reload|force-reload)
   	reload
 	;;
   status)
@@ -79,7 +79,7 @@ case "$1" in
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|flush-logs|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|reload|force-reload|status}"
 	exit 3
 esac
 
