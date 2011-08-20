@@ -1,11 +1,11 @@
 Summary:	ThinkPad fan control program
 Name:		thinkfan
-Version:	0.7.1
+Version:	0.7.2
 Release:	1
-License:	GPL
+License:	GPL v3
 Group:		Base
 Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
-# Source0-md5:	0e98ec7854edbb8186544f3aec6d95e4
+# Source0-md5:	bb209657c5bcb5fa35b5a1e32833e5a8
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
