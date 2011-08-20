@@ -1,13 +1,15 @@
 Summary:	ThinkPad fan control program
+Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
 Version:	0.7.2
 Release:	1
-License:	GPL v3
-Group:		Base
+License:	GPL v3+
+Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
 # Source0-md5:	bb209657c5bcb5fa35b5a1e32833e5a8
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
+BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -16,9 +18,17 @@ sysfs hwmon interface (/sys/class/hwmon). It is designed to eat as
 little CPU power as possible. The development was inspired by the
 excellent work people have done on thinkwiki.org.
 
+%description -l pl.UTF-8
+Minimalistyczny program do sterowania wiatraczkiem. Obsługuje dowolny
+system poprzez interfejs sysfs hwmon (/sys/class/hwmon). Został tak
+zaprojektowany, aby obciążać procesor w najmniejszym możliwym stopniu.
+Stworzenie tego narzędzia zostało zainspirowane wspaniałą pracą
+wykonaną przez ludzi na thinkwiki.org.
+
 %prep
 %setup -q
-sed -i -e 's#gcc#%{__cc}#g' Makefile
+
+%{__sed} -i -e 's#gcc#%{__cc}#g' Makefile
 
 %build
 %{__make} \
