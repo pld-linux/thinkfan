@@ -1,12 +1,12 @@
 Summary:	ThinkPad fan control program
 Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
-Version:	0.7.2
+Version:	0.7.3
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
-# Source0-md5:	bb209657c5bcb5fa35b5a1e32833e5a8
+# Source0-md5:	d1b0d7a05b37cce412ee227cf759a9f6
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
 BuildRequires:	sed >= 4.0
