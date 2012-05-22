@@ -1,12 +1,12 @@
 Summary:	ThinkPad fan control program
 Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
-Version:	0.7.3
+Version:	0.8.0
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
-# Source0-md5:	d1b0d7a05b37cce412ee227cf759a9f6
+# Source0-md5:	cf746505a4e28d5afcfbb486e4930cb5
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
 BuildRequires:	sed >= 4.0
@@ -41,7 +41,7 @@ install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man1,/etc/rc.d/init.d}
 
 install -p thinkfan $RPM_BUILD_ROOT%{_sbindir}
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-cp -p thinkfan.conf.sysfs $RPM_BUILD_ROOT%{_sysconfdir}/thinkfan.conf
+cp -p examples/thinkfan.conf.sysfs $RPM_BUILD_ROOT%{_sysconfdir}/thinkfan.conf
 cp -p thinkfan.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 %clean
@@ -59,7 +59,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc NEWS README ChangeLog thinkfan.conf.thinkpad
+%doc ChangeLog NEWS README examples/thinkfan.conf.*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/thinkfan
