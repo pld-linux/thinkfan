@@ -10,6 +10,7 @@ Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
 BuildRequires:	cmake
+BuildRequires:	libatasmart-devel
 BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -34,7 +35,9 @@ wykonaną przez ludzi na thinkwiki.org.
 %build
 install -d build
 cd build
-%{cmake} ..
+%{cmake} \
+	-DUSE_ATASMART=1 \
+	..
 
 %install
 rm -rf $RPM_BUILD_ROOT
