@@ -1,14 +1,15 @@
 Summary:	ThinkPad fan control program
 Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
-Version:	0.8.1
+Version:	0.9.1
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
-# Source0-md5:	aaa6c88bab3b43756ac5a1638622828c
+# Source0-md5:	a981142f2c52ee4b0af69d5abbe03ced
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
+BuildRequires:	cmake
 BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -28,21 +29,22 @@ wykonaną przez ludzi na thinkwiki.org.
 %prep
 %setup -q
 
-%{__sed} -i -e 's#gcc#%{__cc}#g' Makefile
+%{__sed} -i -e 's#bin#sbin#g' -e 's#man/man1#share/man/man1#g' CMakeLists.txt
 
 %build
-%{__make} \
-	CC="%{__cc}" \
-	CFLAGS="%{rpmcppflags} %{rpmcflags}"
+install -d build
+cd build
+%{cmake} ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_mandir}/man1,/etc/rc.d/init.d}
+install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
 
-install -p thinkfan $RPM_BUILD_ROOT%{_sbindir}
+%{__make} -C build install \
+	DESTDIR=$RPM_BUILD_ROOT
+
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-cp -p examples/thinkfan.conf.sysfs $RPM_BUILD_ROOT%{_sysconfdir}/thinkfan.conf
-cp -p thinkfan.1 $RPM_BUILD_ROOT%{_mandir}/man1
+cp -p examples/thinkfan.conf.simple $RPM_BUILD_ROOT%{_sysconfdir}/thinkfan.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -59,7 +61,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog NEWS README examples/thinkfan.conf.*
+%doc NEWS README examples/thinkfan.conf.*
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/thinkfan
