@@ -9,7 +9,7 @@ Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
 # Source0-md5:	a981142f2c52ee4b0af69d5abbe03ced
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
-BuildRequires:	cmake
+BuildRequires:	cmake >= 2.6
 BuildRequires:	libatasmart-devel
 BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
