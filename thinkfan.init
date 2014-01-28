@@ -59,10 +59,10 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-  	start
+	start
 	;;
   stop)
-  	stop
+	stop
 	;;
   restart)
 	stop
@@ -72,7 +72,7 @@ case "$1" in
 	condrestart 0
 	;;
   reload|force-reload)
-  	reload
+	reload
 	;;
   status)
 	status thinkfan
