@@ -11,6 +11,7 @@ Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
 BuildRequires:	cmake >= 2.6
 BuildRequires:	libatasmart-devel
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	sed >= 4.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -35,7 +36,7 @@ wykonaną przez ludzi na thinkwiki.org.
 %build
 install -d build
 cd build
-%{cmake} \
+%cmake \
 	-DUSE_ATASMART=1 \
 	..
 
