@@ -1,12 +1,12 @@
 Summary:	ThinkPad fan control program
 Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
-Version:	0.9.1
+Version:	0.9.2
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/thinkfan/%{name}-%{version}.tar.gz
-# Source0-md5:	a981142f2c52ee4b0af69d5abbe03ced
+# Source0-md5:	4292633aebd61b91f04cd332c4d3e181
 Source1:	%{name}.init
 URL:		http://thinkfan.sourceforge.net/
 BuildRequires:	cmake >= 2.6
@@ -29,9 +29,7 @@ Stworzenie tego narzędzia zostało zainspirowane wspaniałą pracą
 wykonaną przez ludzi na thinkwiki.org.
 
 %prep
-%setup -q
-
-%{__sed} -i -e 's#bin#sbin#g' -e 's#man/man1#share/man/man1#g' CMakeLists.txt
+%setup -q -c thinkfan-0.9.2
 
 %build
 install -d build
