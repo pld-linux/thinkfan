@@ -29,7 +29,7 @@ Stworzenie tego narzędzia zostało zainspirowane wspaniałą pracą
 wykonaną przez ludzi na thinkwiki.org.
 
 %prep
-%setup -q -c thinkfan-0.9.2
+%setup -q -c
 
 %build
 install -d build
