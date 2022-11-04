@@ -6,7 +6,7 @@ Release:	1
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/vmatare/thinkfan/releases
-Source0:        https://github.com/vmatare/thinkfan/archive/refs/tags/%{version}.tar.gz
+Source0:	https://github.com/vmatare/thinkfan/archive/refs/tags/%{version}.tar.gz
 # Source0-md5:	8f7cdec0a524ed99fe6836f95d749da1
 Source1:	%{name}.init
 URL:		https://github.com/vmatare/thinkfan
@@ -14,6 +14,8 @@ BuildRequires:	cmake >= 2.6
 BuildRequires:	libatasmart-devel
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	sed >= 4.0
+BuildRequires:	systemd-devel
+BuildRequires:	yaml-cpp-devel >= 0.5.4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -41,15 +43,18 @@ cd build
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
-	$RPM_BUILD_ROOT{%{systemdunitdir},/etc/systemd/system}
+$RPM_BUILD_ROOT{%{systemdunitdir},%{_sysconfdir}/systemd/system}
 
 
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# Packaged by %doc
+%{__rm} $RPM_BUILD_ROOT%{_docdir}/{COPYING,README.md,thinkfan.yaml}
+
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p examples/thinkfan.yaml $RPM_BUILD_ROOT%{_sysconfdir}/thinkfan.yaml
-cp -p build/rcscripts/systemd/%{name}.service $RPM_BUILD_ROOT%{systemdunitdir}
+mv $RPM_BUILD_ROOT%{_prefix}%{systemdunitdir}/*.service $RPM_BUILD_ROOT%{systemdunitdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -75,8 +80,14 @@ fi
 %files
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.yaml
+%dir %{_sysconfdir}/systemd/system/thinkfan.service.d
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/systemd/system/thinkfan.service.d/override.conf
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(755,root,root) %{_sbindir}/thinkfan
 %doc COPYING README.md examples/thinkfan.yaml
 %{_mandir}/man1/thinkfan.1*
+%{_mandir}/man5/thinkfan.conf.5*
+%{_mandir}/man5/thinkfan.conf.legacy.5*
 %{systemdunitdir}/%{name}.service
+%{systemdunitdir}/%{name}-sleep.service
+%{systemdunitdir}/%{name}-wakeup.service
