@@ -2,16 +2,20 @@ Summary:	ThinkPad fan control program
 Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
 Version:	1.3.1
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/vmatare/thinkfan/releases
+# TODO:
+#Source0:	https://github.com/vmatare/thinkfan/archive/%{version}/%{name}-%{version}.tar.gz
 Source0:	https://github.com/vmatare/thinkfan/archive/refs/tags/%{version}.tar.gz
 # Source0-md5:	8f7cdec0a524ed99fe6836f95d749da1
 Source1:	%{name}.init
 URL:		https://github.com/vmatare/thinkfan
-BuildRequires:	cmake >= 2.6
+BuildRequires:	cmake >= 3.0
 BuildRequires:	libatasmart-devel
+BuildRequires:	libstdc++-devel >= 6:5
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	sed >= 4.0
 BuildRequires:	systemd-devel
@@ -43,8 +47,7 @@ cd build
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/rc.d/init.d \
-$RPM_BUILD_ROOT{%{systemdunitdir},%{_sysconfdir}/systemd/system}
-
+	$RPM_BUILD_ROOT{%{systemdunitdir},%{_sysconfdir}/systemd/system}
 
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -54,7 +57,7 @@ $RPM_BUILD_ROOT{%{systemdunitdir},%{_sysconfdir}/systemd/system}
 
 install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 cp -p examples/thinkfan.yaml $RPM_BUILD_ROOT%{_sysconfdir}/thinkfan.yaml
-mv $RPM_BUILD_ROOT%{_prefix}%{systemdunitdir}/*.service $RPM_BUILD_ROOT%{systemdunitdir}
+%{__mv} $RPM_BUILD_ROOT%{_prefix}%{systemdunitdir}/*.service $RPM_BUILD_ROOT%{systemdunitdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
