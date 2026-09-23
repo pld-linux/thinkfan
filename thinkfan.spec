@@ -1,20 +1,23 @@
 Summary:	ThinkPad fan control program
 Summary(pl.UTF-8):	Program do sterowania wiatraczkiem w ThinkPadach
 Name:		thinkfan
-Version:	1.3.1
-Release:	2
+Version:	2.0.0
+Release:	1
 License:	GPL v3+
 Group:		Applications/System
 #Source0Download: https://github.com/vmatare/thinkfan/releases
 # TODO:
-#Source0:	https://github.com/vmatare/thinkfan/archive/%{version}/%{name}-%{version}.tar.gz
-Source0:	https://github.com/vmatare/thinkfan/archive/refs/tags/%{version}.tar.gz
-# Source0-md5:	8f7cdec0a524ed99fe6836f95d749da1
+Source0:	https://github.com/vmatare/thinkfan/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	83e1ee464229bc5a649c5280f4563097
 Source1:	%{name}.init
 URL:		https://github.com/vmatare/thinkfan
-BuildRequires:	cmake >= 3.0
+BuildRequires:	cmake >= 3.10
 BuildRequires:	libatasmart-devel
-BuildRequires:	libstdc++-devel >= 6:5
+%ifarch riscv64
+BuildRequires:	libatomic-devel
+%endif
+BuildRequires:	libstdc++-devel >= 6:7
+BuildRequires:	lm_sensors-devel >= 3.5
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRequires:	sed >= 4.0
@@ -41,8 +44,8 @@ wykonaną przez ludzi na thinkwiki.org.
 %build
 install -d build
 cd build
-%cmake \
-	..
+%cmake .. \
+	-DUSE_ATASMART=ON
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -82,15 +85,15 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}.yaml
+%doc README.md examples/thinkfan.yaml
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/thinkfan.yaml
 %dir %{_sysconfdir}/systemd/system/thinkfan.service.d
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/systemd/system/thinkfan.service.d/override.conf
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/thinkfan
 %attr(755,root,root) %{_sbindir}/thinkfan
-%doc COPYING README.md examples/thinkfan.yaml
 %{_mandir}/man1/thinkfan.1*
 %{_mandir}/man5/thinkfan.conf.5*
 %{_mandir}/man5/thinkfan.conf.legacy.5*
-%{systemdunitdir}/%{name}.service
-%{systemdunitdir}/%{name}-sleep.service
-%{systemdunitdir}/%{name}-wakeup.service
+%{systemdunitdir}/thinkfan.service
+%{systemdunitdir}/thinkfan-sleep.service
+%{systemdunitdir}/thinkfan-wakeup.service
